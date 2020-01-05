@@ -39,6 +39,8 @@ func _handle_resize():
 	$Viewport2.size = screen_size
 	view.rect_size = screen_size
 	
+	view.material.set_shader_param('viewport_size', screen_size)
+	
 func _move_cameras():
 	var dx: Vector3 = player2.translation - player1.translation
 	

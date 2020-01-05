@@ -1,6 +1,7 @@
 shader_type canvas_item;
 render_mode unshaded;
 
+uniform vec2 viewport_size;
 uniform sampler2D viewport1 : hint_albedo;
 uniform sampler2D viewport2 : hint_albedo;
 uniform bool split_active; 	// true: split screen, false: use view1
@@ -22,8 +23,8 @@ void fragment() {
     vec3 view2 = texture(viewport2, UV).rgb;
 
 	// Compute viewport's width and height in pixels
-	float width = float(textureSize(viewport1, 0).x);
-	float height = float(textureSize(viewport1, 0).y);
+	float width = viewport_size.x;
+	float height = viewport_size.y;
 	
 	if (split_active) {
 		vec2 dx = player2 - player1;

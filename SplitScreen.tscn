@@ -10,6 +10,7 @@
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
+shader_param/viewport_size = null
 shader_param/split_active = null
 shader_param/split_origin = null
 shader_param/player1 = null
@@ -177,7 +178,6 @@ transform = Transform( 200, 0, 0, 0, 1, 0, 0, 0, 200, 0, -1, 0 )
 shape = SubResource( 13 )
 
 [node name="Walls" type="Spatial" parent="."]
-editor/display_folded = true
 script = ExtResource( 7 )
 
 [node name="Group1" type="Spatial" parent="Walls"]
@@ -418,7 +418,6 @@ mesh = SubResource( 15 )
 material/0 = null
 
 [node name="Group4" type="Spatial" parent="Walls"]
-editor/display_folded = true
 transform = Transform( 0.155702, 0, -0.987804, 0, 1, 0, 0.987804, 0, 0.155702, 14.0374, 0, 12.1476 )
 
 [node name="Wall1" type="StaticBody" parent="Walls/Group4"]
@@ -448,7 +447,6 @@ mesh = SubResource( 15 )
 material/0 = null
 
 [node name="Wall3" type="StaticBody" parent="Walls/Group4"]
-editor/display_folded = true
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.99091, 1, -13.3028 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Walls/Group4/Wall3"]
