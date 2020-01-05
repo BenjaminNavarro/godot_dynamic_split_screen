@@ -20,4 +20,5 @@ Open and launch the project inside the Godot engine and then you can use WASD ke
 
 The `Cameras` node has parameters to tune the distance at which the screen splits and also the width and color of the splitting line.
 
-
+# Try it out
+An HTML5 export is testable [here](https://benjaminnavarro.github.io/godot_dynamic_split_screen/index.html).
