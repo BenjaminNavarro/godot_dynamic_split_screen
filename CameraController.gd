@@ -8,7 +8,8 @@ onready var view: TextureRect = $'View'
 
 export var MAX_SEPARATION := 20
 export var SPLIT_BORDER_RADIUS := 3.0;
-export var SPLIT_BORDER_COLOR := Color(1.0, 1.0, 1.0, 1.0)
+export var SPLIT_BORDER_COLOR := Color(0.0, 0.0, 0.0, 1.0)
+export var ADAPTIVE_BORDER_THICKNESS := true
 var split_state := false
 var split_origin: Vector2
 
@@ -66,7 +67,14 @@ func _update_splitscreen():
 	var player2_position := camera2.unproject_position(player2.translation)
 	player2_position.x /= screen_size.x;
 	player2_position.y /= screen_size.y;
-
+	
+	if ADAPTIVE_BORDER_THICKNESS:
+		var dx := _compute_dx_world()
+		var distance := Vector2(dx.x, dx.z).length()
+		var split_line_thickness = lerp(0, SPLIT_BORDER_RADIUS, (distance - MAX_SEPARATION) / MAX_SEPARATION)
+		split_line_thickness = clamp(split_line_thickness, 0, SPLIT_BORDER_RADIUS)
+		view.material.set_shader_param('border_width', split_line_thickness)
+	
 	view.material.set_shader_param('split_active', split_state)
 	view.material.set_shader_param('split_origin', split_origin)
 	view.material.set_shader_param('player1', player1_position)
