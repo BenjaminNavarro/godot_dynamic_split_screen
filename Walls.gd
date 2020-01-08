@@ -1,6 +1,11 @@
 extends Spatial
+class_name Walls
 
-func _ready():
+"""
+Set a random color to all objects in the 'walls' group
+"""
+
+func _ready() -> void:
 	var walls = get_tree().get_nodes_in_group("walls")
 	for obj in walls:
 		var material := SpatialMaterial.new()
