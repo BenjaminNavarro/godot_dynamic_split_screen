@@ -23,17 +23,18 @@ The points of customization are:
 		middle of the screen (0.5, 0.5) 
 """
 
+export var max_separation := 20
+export var split_line_thickness := 3.0;
+export var split_line_color := Color(0.0, 0.0, 0.0, 1.0)
+export var adaptive_split_line_thickness := true
+export var split_origin := Vector2(0.5, 0.5)
+
 onready var player1: KinematicBody = $'../Player1'
 onready var player2: KinematicBody = $'../Player2'
 onready var camera1: Camera = $'Viewport1/Camera1'
 onready var camera2: Camera = $'Viewport2/Camera2'
 onready var view: TextureRect = $'View'
 
-export var max_separation := 20
-export var split_line_thickness := 3.0;
-export var split_line_color := Color(0.0, 0.0, 0.0, 1.0)
-export var adaptive_split_line_thickness := true
-export var split_origin: Vector2 = Vector2(0.5, 0.5)
 
 func _ready() -> void:
 	_on_size_changed()
@@ -45,24 +46,23 @@ func _ready() -> void:
 	view.material.set_shader_param('viewport2', $Viewport2.get_texture())
 	
 	
-# warning-ignore:unused_argument
 func _process(delta) -> void:
 	_move_cameras()
 	_update_splitscreen()
 	
 	
 func _move_cameras() -> void:
-	var dx: Vector3 = player2.translation - player1.translation
+	var position_difference := _compute_position_difference_in_world()
 	
-	var distance := clamp(Vector2(dx.x, dx.z).length(), 0, max_separation)
+	var distance := clamp(_compute_horizontal_length(position_difference), 0, max_separation)
 
-	dx = dx.normalized() * distance
+	position_difference = position_difference.normalized() * distance
 
-	camera1.translation.x = player1.translation.x + dx.x / 2.0
-	camera1.translation.z = player1.translation.z + dx.z / 2.0
+	camera1.translation.x = player1.translation.x + position_difference.x / 2.0
+	camera1.translation.z = player1.translation.z + position_difference.z / 2.0
 
-	camera2.translation.x = player2.translation.x - dx.x / 2.0
-	camera2.translation.z = player2.translation.z - dx.z / 2.0
+	camera2.translation.x = player2.translation.x - position_difference.x / 2.0
+	camera2.translation.z = player2.translation.z - position_difference.z / 2.0
 	
 	
 func _update_splitscreen() -> void:
@@ -78,8 +78,8 @@ func _update_splitscreen() -> void:
 	
 	var thickness: float
 	if adaptive_split_line_thickness:
-		var dx := _compute_dx_world()
-		var distance := Vector2(dx.x, dx.z).length()
+		var position_difference := _compute_position_difference_in_world()
+		var distance := _compute_horizontal_length(position_difference)
 		thickness = lerp(0, split_line_thickness, (distance - max_separation) / max_separation)
 		thickness = clamp(thickness, 0, split_line_thickness)
 	else:
@@ -94,12 +94,13 @@ func _update_splitscreen() -> void:
 	
 	
 func _get_split_state() -> bool:
-	var dx := _compute_dx_world()
-	return Vector2(dx.x, dx.z).length() > max_separation
+	var position_difference := _compute_position_difference_in_world()
+	return _compute_horizontal_length(position_difference) > max_separation
 	
 	
 func _on_size_changed() -> void:
 	var screen_size := get_viewport().get_visible_rect().size
+	
 	$Viewport1.size = screen_size
 	$Viewport2.size = screen_size
 	view.rect_size = screen_size
@@ -107,7 +108,9 @@ func _on_size_changed() -> void:
 	view.material.set_shader_param('viewport_size', screen_size)
 	
 	
-func _compute_dx_world() -> Vector3:
+func _compute_position_difference_in_world() -> Vector3:
 	return player2.translation - player1.translation
 	
 	
+func _compute_horizontal_length(vec: Vector3) -> float:
+	return Vector2(vec.x, vec.z).length()
