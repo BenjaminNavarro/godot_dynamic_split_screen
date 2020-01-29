@@ -1,6 +1,8 @@
 # The project
 This sample project showcases an implementation of dynamic split screen, also called Voronoi split screen, using the [Godot engine](https://godotengine.org).
 
+This is now part of the [Godot demo projects](https://github.com/godotengine/godot-demo-projects), under `viewport/dynamic_split_screen` and accessible soon from the Godot project manager, under the template tab.
+
 # Dynamic split screen
 A dynamic split screen system displays a single screen when the two players are close but a splitted view when they move apart.
 
